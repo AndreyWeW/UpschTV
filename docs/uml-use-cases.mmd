@@ -1,0 +1,35 @@
+graph TD
+    Dispatcher[Диспетчер]
+    Chief[Начальник караула]
+    Admin[Администратор]
+    Management[Руководство]
+    TV[TV Panel]
+    Bot[Telegram-бот]
+
+    UC1((Регистрация выезда))
+    UC2((Управление личным составом))
+    UC3((Планирование смен))
+    UC4((Учёт техники и ТО))
+    UC5((Учёт ГСМ))
+    UC6((Формирование отчётов))
+    UC7((Просмотр аналитики и KPI))
+    UC8((Отображение статуса в реальном времени))
+    UC9((Публикация уведомлений))
+
+    Dispatcher --> UC1
+    Dispatcher --> UC5
+    Dispatcher --> UC6
+    Chief --> UC2
+    Chief --> UC3
+    Chief --> UC1
+    Admin --> UC2
+    Admin --> UC4
+    Admin --> UC5
+    Admin --> UC6
+    Management --> UC7
+    TV --> UC8
+    Bot --> UC9
+
+    UC1 --> UC8
+    UC5 --> UC8
+    UC6 --> UC9

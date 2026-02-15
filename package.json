@@ -1,0 +1,15 @@
+{
+  "name": "upsch-platform",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Monorepo scaffold for operational unit management platform",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "check:format": "git diff --check",
+    "docs:list": "rg --files docs"
+  }
+}

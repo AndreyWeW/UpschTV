@@ -1,0 +1,83 @@
+erDiagram
+    USERS {
+        uuid id PK
+        string name
+        string rank
+        string position
+        string role
+        uuid guard_id FK
+    }
+
+    GUARDS {
+        uuid id PK
+        string name
+        int number
+    }
+
+    DISPATCHES {
+        uuid id PK
+        datetime date
+        datetime call_time
+        datetime departure_time
+        datetime arrival_time
+        datetime return_time
+        string type_requested
+        string type_actual
+        string rank
+        string order_number
+        uuid guard_id FK
+    }
+
+    VEHICLES {
+        uuid id PK
+        string model
+        string number
+        string fuel_type
+        float fuel_capacity
+        float current_fuel
+    }
+
+    FUEL_LOGS {
+        uuid id PK
+        uuid vehicle_id FK
+        datetime date
+        float amount
+        float remaining
+    }
+
+    EQUIPMENT {
+        uuid id PK
+        string name
+        uuid vehicle_id FK
+        string status
+    }
+
+    AUDIT_LOGS {
+        uuid id PK
+        string entity
+        uuid entity_id
+        string action
+        uuid user_id FK
+        datetime timestamp
+    }
+
+    DISPATCH_VEHICLES {
+        uuid dispatch_id FK
+        uuid vehicle_id FK
+    }
+
+    DISPATCH_PARTICIPANTS {
+        uuid dispatch_id FK
+        uuid user_id FK
+        string role_on_scene
+    }
+
+    GUARDS ||--o{ USERS : has
+    GUARDS ||--o{ DISPATCHES : performs
+    VEHICLES ||--o{ FUEL_LOGS : has
+    VEHICLES ||--o{ EQUIPMENT : carries
+    USERS ||--o{ AUDIT_LOGS : performs
+    DISPATCHES ||--o{ DISPATCH_VEHICLES : uses
+    VEHICLES ||--o{ DISPATCH_VEHICLES : assigned
+    DISPATCHES ||--o{ DISPATCH_PARTICIPANTS : contains
+    USERS ||--o{ DISPATCH_PARTICIPANTS : involved

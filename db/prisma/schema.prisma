@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guard {
+  id         String     @id @default(uuid()) @db.Uuid
+  name       String
+  number     Int
+  users      User[]
+  dispatches Dispatch[]
+}
+
+model User {
+  id          String                @id @default(uuid()) @db.Uuid
+  name        String
+  rank        String?
+  position    String?
+  role        String
+  guardId     String?               @db.Uuid
+  guard       Guard?                @relation(fields: [guardId], references: [id])
+  auditLogs   AuditLog[]
+  participants DispatchParticipant[]
+}
+
+model Dispatch {
+  id            String                @id @default(uuid()) @db.Uuid
+  date          DateTime
+  callTime      DateTime?
+  departureTime DateTime?
+  arrivalTime   DateTime?
+  returnTime    DateTime?
+  typeRequested String?
+  typeActual    String?
+  rank          String?
+  orderNumber   String?
+  guardId       String?               @db.Uuid
+  guard         Guard?                @relation(fields: [guardId], references: [id])
+  vehicles      DispatchVehicle[]
+  participants  DispatchParticipant[]
+}
+
+model Vehicle {
+  id          String           @id @default(uuid()) @db.Uuid
+  model       String
+  number      String
+  fuelType    String?
+  fuelCapacity Float?
+  currentFuel Float?
+  fuelLogs    FuelLog[]
+  equipment   Equipment[]
+  dispatches  DispatchVehicle[]
+}
+
+model FuelLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  vehicleId String   @db.Uuid
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+  date      DateTime
+  amount    Float
+  remaining Float?
+}
+
+model Equipment {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  vehicleId String?  @db.Uuid
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id])
+  status    String?
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  entity    String
+  entityId  String   @db.Uuid
+  action    String
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  timestamp DateTime @default(now())
+}
+
+model DispatchVehicle {
+  dispatchId String   @db.Uuid
+  vehicleId  String   @db.Uuid
+  dispatch   Dispatch @relation(fields: [dispatchId], references: [id])
+  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id])
+
+  @@id([dispatchId, vehicleId])
+}
+
+model DispatchParticipant {
+  dispatchId  String   @db.Uuid
+  userId      String   @db.Uuid
+  roleOnScene String?
+  dispatch    Dispatch @relation(fields: [dispatchId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@id([dispatchId, userId])
+}

@@ -1,0 +1,56 @@
+openapi: 3.1.0
+info:
+  title: UPSCH Platform API
+  version: 0.1.0
+  description: Initial contract draft for dispatch, vehicle and dashboard endpoints.
+servers:
+  - url: https://api.example.local/v1
+paths:
+  /dispatches:
+    get:
+      summary: List dispatches
+      responses:
+        '200':
+          description: Dispatch list
+    post:
+      summary: Create dispatch
+      responses:
+        '201':
+          description: Dispatch created
+  /dispatches/{id}:
+    put:
+      summary: Update dispatch
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Dispatch updated
+  /vehicles:
+    get:
+      summary: List vehicles
+      responses:
+        '200':
+          description: Vehicle list
+  /fuel:
+    post:
+      summary: Add fuel log entry
+      responses:
+        '201':
+          description: Fuel log created
+  /statistics:
+    get:
+      summary: Get analytics snapshot
+      responses:
+        '200':
+          description: Statistics response
+  /dashboard:
+    get:
+      summary: Get dashboard data
+      responses:
+        '200':
+          description: Dashboard response
